@@ -1,151 +1,144 @@
-// ===== Shared State =====
-let houseBalance = 1000;
-let playerBalance = 1000;
+// --- Shared Bet Slider Updates ---
+document.getElementById("slotBetSlider").oninput = function () {
+  document.getElementById("slotBetValue").innerText = this.value + " HC";
+};
+document.getElementById("bjBetSlider").oninput = function () {
+  document.getElementById("bjBetValue").innerText = this.value + " HC";
+};
+document.getElementById("plinkoBetSlider").oninput = function () {
+  document.getElementById("plinkoBetValue").innerText = this.value + " HC";
+};
 
-// ===== SLOT MACHINE =====
-const slotSymbols = ['🌠', '💎', '🔮', '🌌', '⭐', '🪐'];
+// --- SLOT MACHINE ---
 function spinSlot() {
-  const bet = parseFloat(document.getElementById('slot-bet').value);
-  if (playerBalance < bet) return alert("Not enough HC!");
+  const emojis = ["🌟", "💫", "🚀", "🪐", "👾", "🔮"];
+  const reel1 = document.getElementById("reel1");
+  const reel2 = document.getElementById("reel2");
+  const reel3 = document.getElementById("reel3");
 
-  const reels = document.getElementById('slot-reels');
-  reels.innerHTML = "";
-  let result = [];
-  for (let row = 0; row < 3; row++) {
-    let line = [];
-    for (let col = 0; col < 5; col++) {
-      let symbol = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-      line.push(symbol);
+  const result1 = emojis[Math.floor(Math.random() * emojis.length)];
+  const result2 = emojis[Math.floor(Math.random() * emojis.length)];
+  const result3 = emojis[Math.floor(Math.random() * emojis.length)];
+
+  reel1.textContent = result1;
+  reel2.textContent = result2;
+  reel3.textContent = result3;
+
+  const resultText = document.getElementById("slot-result");
+  if (result1 === result2 && result2 === result3) {
+    resultText.innerText = "🎉 JACKPOT! You win!";
+  } else if (result1 === result2 || result2 === result3 || result1 === result3) {
+    resultText.innerText = "✨ Partial Win!";
+  } else {
+    resultText.innerText = "🙃 Try again!";
+  }
+}
+
+// --- BLACKJACK ---
+let player = [], dealer = [], deck = [];
+
+function createDeck() {
+  const suits = ['♠️', '♥️', '♦️', '♣️'];
+  const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+  deck = [];
+  for (let suit of suits) {
+    for (let value of values) {
+      deck.push({ value, suit });
     }
-    result.push(line);
   }
-
-  // Display
-  result.forEach(row => {
-    let div = document.createElement('div');
-    div.classList.add('slot-row');
-    div.innerHTML = row.join(" ");
-    reels.appendChild(div);
-  });
-
-  // Check wins (middle row match)
-  const middle = result[1];
-  let win = 0;
-  if (new Set(middle).size === 1) {
-    win = bet * 10;
-  } else if (new Set(middle.slice(0, 3)).size === 1) {
-    win = bet * 3;
-  }
-
-  playerBalance -= bet;
-  playerBalance += win;
-  document.getElementById('slot-result').textContent = win ? `You won ${win.toFixed(2)} HC!` : "Try again!";
+  deck = deck.sort(() => Math.random() - 0.5);
 }
 
-// ===== BLACKJACK =====
-let player = [], dealer = [];
-function drawCard() {
-  const suits = ['♠', '♥', '♦', '♣'];
-  const values = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
-  let value = values[Math.floor(Math.random() * values.length)];
-  let suit = suits[Math.floor(Math.random() * suits.length)];
-  return { value, suit };
+function getCardHTML(card) {
+  return `<div class="card">${card.value}${card.suit}</div>`;
 }
-function cardValue(card) {
-  if (['J','Q','K'].includes(card.value)) return 10;
-  if (card.value === 'A') return 11;
-  return parseInt(card.value);
-}
-function calcTotal(hand) {
-  let total = 0, aces = 0;
+
+function getHandValue(hand) {
+  let value = 0, aces = 0;
   hand.forEach(card => {
-    total += cardValue(card);
-    if (card.value === 'A') aces++;
+    if (['J','Q','K'].includes(card.value)) value += 10;
+    else if (card.value === 'A') {
+      value += 11;
+      aces++;
+    } else value += parseInt(card.value);
   });
-  while (total > 21 && aces > 0) {
-    total -= 10;
+  while (value > 21 && aces) {
+    value -= 10;
     aces--;
   }
-  return total;
+  return value;
 }
-function displayHands() {
-  const dealerDiv = document.getElementById('dealer-cards');
-  const playerDiv = document.getElementById('player-cards');
-  dealerDiv.innerHTML = dealer.map(c => `<div class="card">${c.value}${c.suit}</div>`).join('');
-  playerDiv.innerHTML = player.map(c => `<div class="card">${c.value}${c.suit}</div>`).join('');
-}
+
 function deal() {
-  const bet = parseFloat(document.getElementById('blackjack-bet').value);
-  if (playerBalance < bet) return alert("Not enough HC!");
-
-  playerBalance -= bet;
-  player = [drawCard(), drawCard()];
-  dealer = [drawCard()];
-  displayHands();
-  document.getElementById('blackjack-status').textContent = "";
+  createDeck();
+  player = [deck.pop(), deck.pop()];
+  dealer = [deck.pop(), deck.pop()];
+  updateHands();
+  document.getElementById("bj-result").innerText = "";
 }
+
 function hit() {
-  player.push(drawCard());
-  displayHands();
-  if (calcTotal(player) > 21) {
-    document.getElementById('blackjack-status').textContent = "You busted!";
+  player.push(deck.pop());
+  updateHands();
+  if (getHandValue(player) > 21) {
+    document.getElementById("bj-result").innerText = "😵 Bust! Dealer wins.";
   }
 }
+
 function stand() {
-  const bet = parseFloat(document.getElementById('blackjack-bet').value);
-  while (calcTotal(dealer) < 17) dealer.push(drawCard());
-  displayHands();
-  let pTotal = calcTotal(player), dTotal = calcTotal(dealer);
+  while (getHandValue(dealer) < 17) dealer.push(deck.pop());
+  updateHands();
+  const playerScore = getHandValue(player);
+  const dealerScore = getHandValue(dealer);
   let result = "";
-
-  if (pTotal > 21) result = "You lose!";
-  else if (dTotal > 21 || pTotal > dTotal) {
-    result = "You win!";
-    playerBalance += bet * 2;
-  } else if (pTotal === dTotal) {
-    result = "Push.";
-    playerBalance += bet;
-  } else {
-    result = "You lose!";
-  }
-
-  document.getElementById('blackjack-status').textContent = result;
+  if (dealerScore > 21 || playerScore > dealerScore) result = "🤑 You win!";
+  else if (playerScore < dealerScore) result = "😓 Dealer wins.";
+  else result = "🤝 Push!";
+  document.getElementById("bj-result").innerText = result;
 }
 
-// ===== PLINKO =====
-const multipliers = [2, 1.5, 1, 0.5, 2, 0.5, 1, 1.5, 3, 0.5, 1, 5];
-function drawPlinkoBoard() {
-  const board = document.getElementById('plinko-board');
-  board.innerHTML = '';
-  for (let i = 0; i < 12; i++) {
-    let row = document.createElement('div');
-    row.className = 'plinko-row';
+function updateHands() {
+  document.getElementById("player-hand").innerHTML = player.map(getCardHTML).join("");
+  document.getElementById("dealer-hand").innerHTML = dealer.map(getCardHTML).join("");
+}
+
+// --- PLINKO ---
+function createPlinkoBoard() {
+  const board = document.getElementById("plinko-board");
+  board.innerHTML = "";
+  const rows = 12;
+  for (let i = 0; i < rows; i++) {
+    const row = document.createElement("div");
+    row.className = "plinko-row";
     for (let j = 0; j <= i; j++) {
-      let peg = document.createElement('div');
-      peg.className = 'peg';
+      const peg = document.createElement("div");
+      peg.className = "plinko-peg";
       row.appendChild(peg);
     }
     board.appendChild(row);
   }
-
-  const slots = document.getElementById('plinko-slots');
-  slots.innerHTML = multipliers.map(m => `<div class='plinko-slot'>x${m}</div>`).join('');
+  const multipliers = [0.5, 0.75, 1, 2, 5, 10, 5, 2, 1, 0.75, 0.5];
+  const multRow = document.createElement("div");
+  multRow.className = "plinko-multiplier-row";
+  multipliers.forEach(m => {
+    const mult = document.createElement("div");
+    mult.className = "plinko-multiplier";
+    mult.innerText = m + "x";
+    multRow.appendChild(mult);
+  });
+  board.appendChild(multRow);
 }
-function dropPlinko() {
-  const bet = parseFloat(document.getElementById('plinko-bet').value);
-  if (playerBalance < bet) return alert("Not enough HC!");
 
-  let pos = 6;
-  for (let i = 0; i < 12; i++) {
-    pos += Math.random() > 0.5 ? 1 : -1;
-    if (pos < 0) pos = 0;
-    if (pos > multipliers.length - 1) pos = multipliers.length - 1;
-  }
-  const multiplier = multipliers[pos];
-  const win = bet * multiplier;
+function dropPlinkoBall() {
+  const multipliers = [0.5, 0.75, 1, 2, 5, 10, 5, 2, 1, 0.75, 0.5];
+  const position = Math.floor(multipliers.length / 2) + (Math.floor(Math.random() * 5) - 2);
+  const finalIndex = Math.max(0, Math.min(multipliers.length - 1, position));
+  const mult = multipliers[finalIndex];
+  const bet = parseFloat(document.getElementById("plinkoBetSlider").value);
+  const result = bet * mult;
 
-  playerBalance -= bet;
-  playerBalance += win;
-  document.getElementById('plinko-result').textContent = `Landed on x${multiplier}. You won ${win.toFixed(2)} HC!`;
+  document.getElementById("plinko-result").innerText = `🎯 You hit ${mult}x! Won ${result.toFixed(2)} HC`;
 }
-drawPlinkoBoard();
+
+// Initialize board on load
+window.onload = createPlinkoBoard;
