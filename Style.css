@@ -1,166 +1,143 @@
-/* Cosmic Casino Theme */
-
 body {
-  margin: 0;
+  background: radial-gradient(circle at center, #0d0d25, #000010);
   font-family: 'Orbitron', sans-serif;
-  background: radial-gradient(circle at center, #1a0033, #000000);
   color: #fff;
-  overflow-x: hidden;
+  margin: 0;
+  padding: 20px;
   text-align: center;
 }
 
-h1 {
-  margin-top: 20px;
-  font-size: 2.5em;
-  color: #e0b3ff;
-  text-shadow: 0 0 10px #ff00ff;
+h1, h2 {
+  color: #ffde59;
+  text-shadow: 0 0 10px #fff, 0 0 20px #00f0ff;
 }
 
-#hc-balance {
-  font-size: 1.2em;
-  margin-bottom: 15px;
-  display: inline-block;
-  padding: 5px 10px;
-  background-color: #4c0066;
-  border-radius: 8px;
-  box-shadow: 0 0 10px #9900cc;
+#balance {
+  font-size: 1.5em;
+  color: #00ffcc;
+  margin-bottom: 20px;
 }
 
-/* --- SECTION CONTAINERS --- */
-.section {
-  border: 2px solid #9900cc;
-  border-radius: 12px;
-  margin: 30px auto;
+section {
+  margin: 40px auto;
   padding: 20px;
-  width: 90%;
-  max-width: 700px;
-  background: rgba(25, 0, 51, 0.8);
-  box-shadow: 0 0 20px #6600cc;
-}
-
-/* --- SLOT MACHINE --- */
-#slot-machine {
-  display: flex;
-  justify-content: center;
-  margin-top: 15px;
-}
-
-.reel {
-  font-size: 3em;
-  padding: 10px 15px;
-  background-color: #26004d;
-  margin: 0 5px;
-  border-radius: 8px;
-  box-shadow: 0 0 8px #9933ff;
-}
-
-/* --- BLACKJACK --- */
-.cards {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-  gap: 8px;
-}
-
-.card {
-  font-size: 1.8em;
-  padding: 10px;
-  border: 2px solid #fff;
-  border-radius: 8px;
-  background: #330066;
-  box-shadow: 0 0 5px #ff66ff;
-  width: 50px;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* --- PLINKO --- */
-#plinko-container {
-  margin-top: 20px;
-}
-
-.plinko-row {
-  display: flex;
-  justify-content: center;
-  margin: 2px 0;
-}
-
-.plinko-peg {
-  width: 10px;
-  height: 10px;
-  background: #ffccff;
-  border-radius: 50%;
-  margin: 0 4px;
-}
-
-.plinko-multipliers {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.multiplier {
-  font-size: 1em;
-  margin: 0 10px;
-  padding: 5px;
-  background-color: #330033;
-  border: 1px solid #cc33ff;
-  border-radius: 5px;
-  box-shadow: 0 0 5px #ff33ff;
-}
-
-/* --- BUTTONS & INPUTS --- */
-button, input[type="number"] {
-  margin: 8px;
-  padding: 10px 15px;
-  font-size: 1em;
-  border: none;
-  border-radius: 6px;
-  background: #6600cc;
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 0 10px #aa00ff;
-}
-
-button:hover {
-  background-color: #9900ff;
+  border: 2px solid #ffffff33;
+  border-radius: 12px;
+  background: #1a1a2e88;
+  box-shadow: 0 0 20px #00f0ff55;
+  max-width: 800px;
 }
 
 input[type="number"] {
-  background: #1a0033;
-  color: #fff;
-  border: 1px solid #aa00ff;
-  width: 80px;
-}
-
-/* --- DONATE --- */
-#donate {
-  margin: 40px auto;
-  padding: 20px;
-  width: 80%;
-  max-width: 500px;
-  border: 2px solid #ff00ff;
-  border-radius: 10px;
-  background-color: #220033;
-  box-shadow: 0 0 15px #cc00ff;
-}
-
-#donate p {
+  padding: 8px;
+  width: 100px;
   font-size: 1em;
-  margin-bottom: 10px;
-  color: #ffccff;
+  border-radius: 6px;
+  border: none;
+  margin: 10px;
+  background: #111;
+  color: #0f0;
+  text-align: center;
 }
 
-#donate code {
-  display: block;
-  font-size: 0.9em;
-  word-wrap: break-word;
+button {
+  padding: 10px 20px;
+  background: linear-gradient(145deg, #00d9ff, #007fff);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  margin: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px #000000aa;
+  transition: 0.2s ease;
+}
+button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(145deg, #00ffcc, #00d9ff);
+}
+
+/* SLOT MACHINE */
+#slot-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+.slot-reel {
+  background: #222;
+  border: 2px solid #0ff;
+  border-radius: 6px;
+  width: 60px;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  font-size: 2em;
+}
+.slot-symbol {
+  text-shadow: 0 0 8px #fff;
+  text-align: center;
+}
+
+/* BLACKJACK */
+#blackjack-table {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+#player-hand, #dealer-hand {
+  display: flex;
+  gap: 10px;
+}
+.card {
+  background: #fff;
+  color: #000;
+  font-size: 1.5em;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #fff;
+  min-width: 40px;
+}
+
+/* PLINKO */
+#plinko-panel {
+  font-size: 1.2em;
+}
+
+/* Donation Section */
+#donate {
+  background: #222;
+  margin-top: 40px;
+  border: 2px dashed #0ff;
+  padding: 15px;
+}
+#donate p {
+  margin: 5px 0;
+}
+.donation-address {
+  font-family: monospace;
   background: #000;
   padding: 10px;
+  display: inline-block;
   border-radius: 6px;
-  border: 1px solid #660066;
-  margin-top: 5px;
-  color: #fff;
+  font-size: 0.9em;
+  color: #0ff;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  #slot-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .slot-reel {
+    width: 80%;
+    height: auto;
+  }
+  #blackjack-table {
+    flex-direction: column;
+    align-items: center;
+  }
 }
