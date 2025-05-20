@@ -1,283 +1,137 @@
-/* === GENERAL === */
+/* ===== GLOBAL COSMIC STYLING ===== */
 body {
-  background: radial-gradient(circle at center, #0b0033, #000000 80%);
-  color: #eee;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  padding: 20px;
-  user-select: none;
-  -webkit-font-smoothing: antialiased;
-}
-
-h1, h2, h3 {
-  color: #ff66ff;
-  text-shadow: 0 0 6px #ff33ff;
-  margin-bottom: 12px;
-  font-weight: 700;
-}
-
-/* === BUTTONS === */
-button {
-  background: linear-gradient(45deg, #7700cc, #bb00ff);
-  border: none;
-  border-radius: 12px;
-  padding: 12px 28px;
-  font-size: 1.1rem;
+  background: radial-gradient(ellipse at center, #1b0036 0%, #0d001a 100%);
   color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  color: #ffccff;
+  text-shadow: 0 0 10px #ff99ff;
+}
+
+.container {
+  margin: 30px auto;
+  padding: 20px;
+  border: 2px solid #8221ff;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 15px #912fff;
+  max-width: 800px;
+}
+
+button {
+  background: linear-gradient(135deg, #7d00ff, #b700ff);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1em;
   cursor: pointer;
-  box-shadow: 0 0 12px #cc00ff;
-  transition: all 0.3s ease;
-  user-select: none;
+  border-radius: 10px;
+  margin: 10px;
+  box-shadow: 0 0 10px #c07cff;
+}
+button:hover {
+  background: linear-gradient(135deg, #9a00ff, #e100ff);
 }
 
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-button:hover:not(:disabled) {
-  box-shadow: 0 0 20px #ff66ff, 0 0 40px #cc00ff;
-  transform: scale(1.05);
-}
-
-/* === SLIDER === */
-input[type=range] {
-  -webkit-appearance: none;
-  width: 140px;
-  height: 6px;
-  border-radius: 5px;
-  background: #330066;
-  outline: none;
-  margin: 0 10px;
-  vertical-align: middle;
-  cursor: pointer;
-}
-
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  background: #ff33ff;
-  cursor: pointer;
-  border-radius: 50%;
-  box-shadow: 0 0 8px #ff66ff;
-  transition: background 0.3s ease;
-}
-
-input[type=range]::-webkit-slider-thumb:hover {
-  background: #ff66ff;
-}
-
-input[type=range]:focus {
-  outline: none;
-}
-
-/* === SLOT MACHINE === */
+/* ===== SLOT MACHINE ===== */
 #slot-reels {
   display: grid;
-  grid-template-columns: repeat(5, 60px);
-  grid-template-rows: repeat(3, 60px);
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 16px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin: 20px 0;
+}
+.slot-row {
+  display: contents;
+}
+.slot-row::after {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+}
+.slot-row div {
+  font-size: 3em;
+  padding: 10px;
+  background: #220044;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #7920ff;
 }
 
-.reel-symbol {
-  font-size: 36px;
-  background: linear-gradient(135deg, #330066, #660099);
-  border-radius: 14px;
-  text-align: center;
-  line-height: 60px;
-  box-shadow: inset 0 0 8px #cc00ff;
-  color: #eee;
-  user-select: none;
-  transition: background-color 0.4s ease, box-shadow 0.4s ease;
-}
-
-/* === BLACKJACK === */
-#blackjack-cards {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-bottom: 16px;
-}
-
-.hand {
-  background: linear-gradient(135deg, #220022, #440044);
-  border-radius: 18px;
-  padding: 16px 24px;
-  box-shadow: 0 0 12px #cc00ff inset;
-  width: 320px;
-  user-select: none;
-}
-
-.hand h3 {
-  text-align: center;
-  margin-bottom: 12px;
-  font-weight: 700;
-  color: #ff33ff;
-  text-shadow: 0 0 6px #ff66ff;
-}
-
-.cards {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-}
-
-.card {
-  width: 60px;
-  height: 90px;
+/* ===== BLACKJACK ===== */
+#blackjack-table {
+  background: rgba(25, 0, 45, 0.8);
+  border: 2px solid #6600ff;
   border-radius: 12px;
-  background: linear-gradient(145deg, #ddd, #bbb);
-  box-shadow: 0 0 8px #cc00ff;
-  position: relative;
-  color: black;
-  font-weight: 700;
-  font-size: 22px;
-  font-family: 'Courier New', Courier, monospace;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 6px 8px;
-  user-select: none;
-  transition: transform 0.3s ease;
-}
-
-.card.red {
-  color: #cc0000;
-}
-
-.card .top-left {
-  align-self: flex-start;
-}
-
-.card .bottom-right {
-  align-self: flex-end;
-  transform: rotate(180deg);
-}
-
-/* Hidden dealer card */
-.hidden-card {
-  background: #330066;
-  border-radius: 12px;
-  box-shadow: 0 0 16px #660099 inset;
-  width: 60px;
-  height: 90px;
-}
-
-/* === PLINKO === */
-#plinko-board {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding: 20px;
   margin-top: 20px;
-  user-select: none;
+}
+.card {
+  display: inline-block;
+  background: white;
+  color: black;
+  border-radius: 8px;
+  font-size: 2em;
+  margin: 5px;
+  width: 50px;
+  height: 70px;
+  line-height: 70px;
+  box-shadow: 2px 2px 8px #ff00ff;
+}
+#dealer-cards, #player-cards {
+  margin: 10px 0;
 }
 
+/* ===== PLINKO ===== */
+#plinko-board {
+  margin-top: 20px;
+}
 .plinko-row {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  margin-bottom: 10px;
-  transition: margin-left 0.3s ease;
+  margin-bottom: 5px;
 }
-
-.plinko-peg {
-  width: 16px;
-  height: 16px;
-  background: radial-gradient(circle at center, #ff33ff, #660099);
+.peg {
+  width: 10px;
+  height: 10px;
+  background: #ffcc00;
   border-radius: 50%;
-  box-shadow: 0 0 12px #cc00ff;
-  cursor: default;
-  user-select: none;
-  transition: background 0.3s ease;
+  margin: 0 5px;
+  box-shadow: 0 0 5px #ffcc00;
 }
-
-/* Ball */
-.plinko-ball {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: radial-gradient(circle at center, #ff66ff, #cc00ff);
-  border-radius: 50%;
-  box-shadow: 0 0 18px #ff33ff;
-  pointer-events: none;
-  user-select: none;
-}
-
-/* Slots at bottom */
-.plinko-slots {
-  margin-top: 16px;
-  gap: 36px;
-}
-
-.plinko-slot {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #660066, #990099);
-  box-shadow: 0 0 14px #cc00ff inset;
-  color: #ffccff;
-  font-weight: 700;
-  font-size: 18px;
+#plinko-slots {
   display: flex;
   justify-content: center;
-  align-items: center;
-  user-select: none;
-  transition: background-color 0.5s ease;
-  cursor: default;
+  margin-top: 10px;
 }
-
-/* Highlight winning slot */
-.plinko-slot.win {
-  background: #ff33ff;
-  box-shadow: 0 0 20px 6px #ff99ff;
+.plinko-slot {
+  width: 40px;
+  height: 40px;
+  margin: 0 5px;
+  border-radius: 8px;
+  background: #110033;
   color: #fff;
-  transform: scale(1.15);
+  line-height: 40px;
+  box-shadow: 0 0 8px #44ffcc;
 }
 
-/* === STATUS AND INFO === */
-#slot-bet-value,
-#blackjack-bet-value,
-#plinko-bet-value {
-  font-weight: 700;
-  color: #ff99ff;
-  user-select: none;
+/* ===== INPUTS ===== */
+input[type="number"] {
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1em;
+  width: 100px;
+  margin: 10px;
+  text-align: center;
 }
 
-#blackjack-status,
-#plinko-result {
-  margin-top: 8px;
-  font-weight: 700;
-  color: #ff33ff;
-  min-height: 24px;
-  user-select: none;
-}
-
-/* === LAYOUT === */
-section {
-  margin-bottom: 48px;
-  border: 2px solid #cc00ff;
-  padding: 20px;
-  border-radius: 24px;
-  background: linear-gradient(145deg, #1a0033, #330066);
-  box-shadow: 0 0 24px #cc00ff inset;
-  max-width: 740px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Responsive adjustments */
-@media (max-width: 800px) {
-  #blackjack-cards {
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  section {
-    max-width: 95vw;
-    padding: 12px;
-  }
+#slot-result, #blackjack-status, #plinko-result {
+  font-size: 1.2em;
+  margin-top: 15px;
+  color: #00ffcc;
+  text-shadow: 0 0 5px #00ffff;
 }
