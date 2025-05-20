@@ -1,17 +1,49 @@
-let balance = 1000;
-const balanceEl = document.getElementById("balance");
+// --- BALANCES & CURRENCY ---
+let aminaBalance = 10.0; // Real Amina
+let houseBalance = 1000.0; // Play money
+let useAmina = false; // Start with House Coins
 
-// ✅ Update balance
+// DOM Elements
+const aminaBalanceEl = document.getElementById("amina-balance");
+const houseBalanceEl = document.getElementById("house-balance");
+const currencyModeEl = document.getElementById("currency-mode");
+const toggleCurrencyBtn = document.getElementById("toggle-currency");
+
+// --- BALANCE MANAGEMENT ---
+function getBalance() {
+  return useAmina ? aminaBalance : houseBalance;
+}
+function setBalance(newAmount) {
+  if (useAmina) aminaBalance = newAmount;
+  else houseBalance = newAmount;
+}
+function updateBalanceDisplay() {
+  aminaBalanceEl.textContent = aminaBalance.toFixed(2);
+  houseBalanceEl.textContent = houseBalance.toFixed(1);
+  currencyModeEl.textContent = `Current: ${useAmina ? "Amina" : "House Coins"}`;
+}
 function updateBalance(amount) {
-  balance += amount;
-  balanceEl.textContent = balance.toFixed(1);
+  setBalance(getBalance() + amount);
+  updateBalanceDisplay();
 }
 
-// 🎰 SLOT MACHINE
+// --- CURRENCY TOGGLE ---
+toggleCurrencyBtn.onclick = function () {
+  useAmina = !useAmina;
+  toggleCurrencyBtn.textContent = useAmina ? "Switch to House Coins" : "Switch to Amina";
+  updateBalanceDisplay();
+};
+
+// --- WALLET CONNECT (Placeholder) ---
+document.getElementById("connect-wallet").onclick = function () {
+  alert("Pera Wallet connect coming soon!");
+};
+
+// --- SLOT MACHINE ---
 const symbols = ["🌟", "💎", "🔮", "🌌", "🪐"];
 function spinSlot() {
   const bet = parseFloat(document.getElementById("slot-bet").value);
-  if (bet > balance) return alert("Not enough balance!");
+  if (bet > getBalance()) return alert("Not enough balance!");
   updateBalance(-bet);
 
   let reels = [[], [], [], [], []];
@@ -36,14 +68,14 @@ function spinSlot() {
   if (allSame) {
     const win = bet * 5;
     updateBalance(win);
-    resultEl.textContent = `✨ Jackpot! You won ${win} HC!`;
+    resultEl.textContent = `✨ Jackpot! You won ${win.toFixed(2)} ${useAmina ? "Amina" : "HC"}!`;
   } else {
     resultEl.textContent = `No win this time.`;
   }
 }
 
-// 🃏 BLACKJACK
-let deck = [], playerHand = [], dealerHand = [], bjBet = 0;
+// --- BLACKJACK ---
+let deck = [], playerHand = [], dealerHand = [], bjBet = 0, gameActive = false;
 function createDeck() {
   const suits = ["♠", "♥", "♦", "♣"];
   const values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
@@ -65,7 +97,7 @@ function getBJValue(hand) {
   while (val > 21 && aces--) val -= 10;
   return val;
 }
-function renderBJ() {
+function renderBJ(hideDealer = false) {
   const playerEl = document.getElementById("player-hand");
   const dealerEl = document.getElementById("dealer-hand");
   playerEl.innerHTML = "";
@@ -76,38 +108,52 @@ function renderBJ() {
     div.textContent = `${c.value}${c.suit}`;
     playerEl.appendChild(div);
   }
-  for (let c of dealerHand) {
+  dealerHand.forEach((c, idx) => {
     const div = document.createElement("div");
     div.className = "card";
-    div.textContent = `${c.value}${c.suit}`;
+    div.textContent = (hideDealer && idx === 1 && gameActive) ? "🂠" : `${c.value}${c.suit}`;
     dealerEl.appendChild(div);
-  }
+  });
 }
 function startBlackjack() {
   bjBet = parseFloat(document.getElementById("bj-bet").value);
-  if (bjBet > balance) return alert("Not enough balance!");
+  if (bjBet > getBalance()) return alert("Not enough balance!");
   updateBalance(-bjBet);
 
   createDeck();
   playerHand = [deck.pop(), deck.pop()];
   dealerHand = [deck.pop(), deck.pop()];
-  renderBJ();
+  gameActive = true;
+  document.getElementById("bj-hit").disabled = false;
+  document.getElementById("bj-stand").disabled = false;
   document.getElementById("bj-result").textContent = "";
+  renderBJ(true);
+
+  // Check for blackjack
+  if (getBJValue(playerHand) === 21) {
+    stand();
+  }
 }
 function hit() {
+  if (!gameActive) return;
   playerHand.push(deck.pop());
-  renderBJ();
+  renderBJ(true);
   if (getBJValue(playerHand) > 21) {
     document.getElementById("bj-result").textContent = "Bust! You lose.";
+    endBlackjack();
   }
 }
 function stand() {
+  if (!gameActive) return;
+  // Dealer's turn
   while (getBJValue(dealerHand) < 17) dealerHand.push(deck.pop());
-  renderBJ();
+  renderBJ(false);
   const playerVal = getBJValue(playerHand);
   const dealerVal = getBJValue(dealerHand);
   let msg = "";
-  if (dealerVal > 21 || playerVal > dealerVal) {
+  if (playerVal > 21) {
+    msg = "Bust! You lose.";
+  } else if (dealerVal > 21 || playerVal > dealerVal) {
     updateBalance(bjBet * 2);
     msg = "You win!";
   } else if (dealerVal === playerVal) {
@@ -117,13 +163,19 @@ function stand() {
     msg = "Dealer wins.";
   }
   document.getElementById("bj-result").textContent = msg;
+  endBlackjack();
+}
+function endBlackjack() {
+  gameActive = false;
+  document.getElementById("bj-hit").disabled = true;
+  document.getElementById("bj-stand").disabled = true;
 }
 
-// 💥 PLINKO
+// --- PLINKO ---
 const multipliers = [0, 0.5, 1, 0.2, 2, 0.1, 5, 0.1, 2, 0.2, 1, 0.5, 0];
 function dropPlinko() {
   const bet = parseFloat(document.getElementById("plinko-bet").value);
-  if (bet > balance) return alert("Not enough balance!");
+  if (bet > getBalance()) return alert("Not enough balance!");
   updateBalance(-bet);
 
   const resultEl = document.getElementById("plinko-result");
@@ -137,5 +189,21 @@ function dropPlinko() {
   const multiplier = multipliers[position] || 0;
   const winnings = bet * multiplier;
   updateBalance(winnings);
-  resultEl.textContent = `Landed in slot ${position} — Multiplier: ${multiplier}x — Won: ${winnings.toFixed(1)} HC`;
+  resultEl.textContent = `Landed in slot ${position} — Multiplier: ${multiplier}x — Won: ${winnings.toFixed(2)} ${useAmina ? "Amina" : "HC"}`;
 }
+
+// --- BET SLIDER DISPLAYS ---
+document.getElementById("bj-bet").oninput = function () {
+  document.getElementById("bj-bet-display").textContent = this.value;
+};
+document.getElementById("slot-bet").oninput = function () {
+  document.getElementById("slot-bet-display").textContent = this.value;
+};
+document.getElementById("plinko-bet").oninput = function () {
+  document.getElementById("plinko-bet-display").textContent = this.value;
+};
+
+// --- INIT ---
+updateBalanceDisplay();
+document.getElementById("bj-hit").disabled = true;
+document.getElementById("bj-stand").disabled = true;
