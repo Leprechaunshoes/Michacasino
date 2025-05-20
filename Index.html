@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Amina Casino - Cosmic Crypto Games</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Amina Casino</h1>
+    <div class="toggle-container">
+      <label>
+        <input type="checkbox" id="modeToggle" />
+        Play Money Mode
+      </label>
+      <button id="donateBtn">Donate Amina</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="slotMachine" class="game-section">
+      <h2>Cosmic Slot Machine</h2>
+      <div class="slot-window">
+        <div class="slot-reel" id="reel1"></div>
+        <div class="slot-reel" id="reel2"></div>
+        <div class="slot-reel" id="reel3"></div>
+        <div class="slot-reel" id="reel4"></div>
+        <div class="slot-reel" id="reel5"></div>
+      </div>
+      <button id="spinBtn">Spin Lever</button>
+      <input type="range" id="slotBet" min="0.01" max="1" step="0.01" value="0.25" />
+      <label for="slotBet" class="bet-label">Bet: <span id="slotBetAmount">0.25</span> Amina</label>
+      <div id="slotResult" class="result-text"></div>
+    </section>
+
+    <section id="blackjack" class="game-section">
+      <h2>Blackjack Table</h2>
+      <div class="blackjack-table">
+        <div class="dealer-area">
+          <h3>Dealer</h3>
+          <div id="dealerCards" class="cards"></div>
+          <div id="dealerScore" class="score"></div>
+        </div>
+        <div class="player-area">
+          <h3>Player</h3>
+          <div id="playerCards" class="cards"></div>
+          <div id="playerScore" class="score"></div>
+        </div>
+      </div>
+      <div class="blackjack-controls">
+        <button id="hitBtn">Hit</button>
+        <button id="standBtn">Stand</button>
+        <input type="range" id="bjBet" min="0.01" max="1" step="0.01" value="0.25" />
+        <label for="bjBet" class="bet-label">Bet: <span id="bjBetAmount">0.25</span> Amina</label>
+      </div>
+      <div id="bjResult" class="result-text"></div>
+    </section>
+
+    <section id="plinko" class="game-section">
+      <h2>Cosmic Plinko</h2>
+      <div id="plinkoBoard"></div>
+      <button id="dropBallBtn">Drop Ball</button>
+      <input type="range" id="plinkoBet" min="0.01" max="1" step="0.01" value="0.25" />
+      <label for="plinkoBet" class="bet-label">Bet: <span id="plinkoBetAmount">0.25</span> Amina</label>
+      <div id="plinkoResult" class="result-text"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Amina Casino - Powered by Algorand</p>
+  </footer>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
