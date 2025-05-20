@@ -3,64 +3,59 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Amina Cosmic Casino</title>
+  <title>Amina Casino</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Amina Cosmic Casino 🌌</h1>
-    </header>
+  <header>
+    <h1>Amina Casino 🎰</h1>
+    <div id="wallet">House Coins: <span id="balance">1000</span></div>
+  </header>
 
-    <section class="game-section">
-      <h2>🎰 Cosmic Slots</h2>
-      <div class="slot-machine">
-        <div class="reel" id="reel1"></div>
-        <div class="reel" id="reel2"></div>
-        <div class="reel" id="reel3"></div>
-        <div class="reel" id="reel4"></div>
-        <div class="reel" id="reel5"></div>
+  <section class="game" id="blackjack-section">
+    <h2>🃏 Blackjack</h2>
+    <div id="blackjack-table">
+      <div>
+        <h3>Dealer</h3>
+        <div id="dealer-hand" class="card-hand"></div>
       </div>
-      <input type="range" min="0.1" max="1" step="0.1" value="0.25" id="slot-bet" />
-      <button onclick="spinSlots()">Spin</button>
-      <div id="slot-result"></div>
-    </section>
-
-    <section class="game-section">
-      <h2>🃏 Cosmic Blackjack</h2>
-      <div class="blackjack-table">
-        <div>
-          <strong>Dealer:</strong>
-          <div id="dealer-cards" class="card-row"></div>
-        </div>
-        <div>
-          <strong>Player:</strong>
-          <div id="player-cards" class="card-row"></div>
-        </div>
-        <input type="range" min="0.1" max="1" step="0.1" value="0.25" id="bj-bet" />
-        <div class="bj-controls">
-          <button onclick="startBlackjack()">Deal</button>
-          <button onclick="hit()">Hit</button>
-          <button onclick="stand()">Stand</button>
-        </div>
-        <div id="bj-result"></div>
+      <div>
+        <h3>You</h3>
+        <div id="player-hand" class="card-hand"></div>
       </div>
-    </section>
+    </div>
+    <input type="range" min="0.1" max="1" step="0.1" id="bj-bet" value="1"/>
+    <button onclick="startBlackjack()">Deal</button>
+    <button onclick="hit()">Hit</button>
+    <button onclick="stand()">Stand</button>
+    <p id="bj-result"></p>
+  </section>
 
-    <section class="game-section">
-      <h2>🪐 Cosmic Plinko</h2>
-      <div class="plinko-board" id="plinko-board"></div>
-      <input type="range" min="0.1" max="1" step="0.1" value="0.25" id="plinko-bet" />
-      <button onclick="dropPlinko()">Drop Ball</button>
-      <div id="plinko-result"></div>
-    </section>
+  <section class="game" id="slot-section">
+    <h2>🎰 Slot Machine</h2>
+    <div id="slot-grid">
+      <div class="slot-reel" id="reel1"></div>
+      <div class="slot-reel" id="reel2"></div>
+      <div class="slot-reel" id="reel3"></div>
+      <div class="slot-reel" id="reel4"></div>
+      <div class="slot-reel" id="reel5"></div>
+    </div>
+    <input type="range" min="0.1" max="1" step="0.1" id="slot-bet" value="1"/>
+    <button onclick="spinSlot()">Spin</button>
+    <p id="slot-result"></p>
+  </section>
 
-    <section class="donate-section">
-      <h3>💖 Donate</h3>
-      <p>If you enjoy the casino, donate to support:</p>
-      <code>6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI</code>
-    </section>
-  </div>
+  <section class="game" id="plinko-section">
+    <h2>💥 Plinko</h2>
+    <div id="plinko-grid"></div>
+    <input type="range" min="0.1" max="1" step="0.1" id="plinko-bet" value="1"/>
+    <button onclick="dropPlinko()">Drop</button>
+    <p id="plinko-result"></p>
+  </section>
+
+  <footer>
+    <p>Donate: 6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI</p>
+  </footer>
 
   <script src="scripts.js"></script>
 </body>
