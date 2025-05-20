@@ -3,58 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Amina Casino</title>
+  <title>Amina Cosmic Casino</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>Amina Casino 🎰</h1>
-    <div id="wallet">House Coins: <span id="balance">1000</span></div>
+    <h1>✨ Amina Cosmic Casino 🎰</h1>
+    <div class="wallet-bar">
+      <button id="connect-wallet">Connect Pera Wallet</button>
+      <button id="toggle-currency">Switch to House Coins</button>
+      <span id="currency-mode">Current: Amina</span>
+      <div id="balances">
+        <span>Amina: <span id="amina-balance">10</span></span> | 
+        <span>House Coins: <span id="house-balance">1000</span></span>
+      </div>
+    </div>
   </header>
 
-  <section class="game" id="blackjack-section">
-    <h2>🃏 Blackjack</h2>
-    <div id="blackjack-table">
-      <div>
-        <h3>Dealer</h3>
-        <div id="dealer-hand" class="card-hand"></div>
+  <main>
+    <section class="game" id="blackjack-section">
+      <h2>🃏 Blackjack</h2>
+      <div id="blackjack-table">
+        <div>
+          <h3>Dealer</h3>
+          <div id="dealer-hand" class="card-hand"></div>
+        </div>
+        <div>
+          <h3>You</h3>
+          <div id="player-hand" class="card-hand"></div>
+        </div>
       </div>
-      <div>
-        <h3>You</h3>
-        <div id="player-hand" class="card-hand"></div>
+      <label for="bj-bet">Bet Size:</label>
+      <input type="range" min="0.1" max="1" step="0.1" id="bj-bet" value="1"/>
+      <span id="bj-bet-display">1</span>
+      <div class="game-controls">
+        <button id="bj-deal" onclick="startBlackjack()">Deal</button>
+        <button id="bj-hit" onclick="hit()" disabled>Hit</button>
+        <button id="bj-stand" onclick="stand()" disabled>Stand</button>
       </div>
-    </div>
-    <input type="range" min="0.1" max="1" step="0.1" id="bj-bet" value="1"/>
-    <button onclick="startBlackjack()">Deal</button>
-    <button onclick="hit()">Hit</button>
-    <button onclick="stand()">Stand</button>
-    <p id="bj-result"></p>
-  </section>
+      <p id="bj-result"></p>
+    </section>
 
-  <section class="game" id="slot-section">
-    <h2>🎰 Slot Machine</h2>
-    <div id="slot-grid">
-      <div class="slot-reel" id="reel1"></div>
-      <div class="slot-reel" id="reel2"></div>
-      <div class="slot-reel" id="reel3"></div>
-      <div class="slot-reel" id="reel4"></div>
-      <div class="slot-reel" id="reel5"></div>
-    </div>
-    <input type="range" min="0.1" max="1" step="0.1" id="slot-bet" value="1"/>
-    <button onclick="spinSlot()">Spin</button>
-    <p id="slot-result"></p>
-  </section>
+    <section class="game" id="slot-section">
+      <h2>🎰 Slot Machine</h2>
+      <div id="slot-grid">
+        <div class="slot-reel" id="reel1"></div>
+        <div class="slot-reel" id="reel2"></div>
+        <div class="slot-reel" id="reel3"></div>
+        <div class="slot-reel" id="reel4"></div>
+        <div class="slot-reel" id="reel5"></div>
+      </div>
+      <label for="slot-bet">Bet Size:</label>
+      <input type="range" min="0.1" max="1" step="0.1" id="slot-bet" value="1"/>
+      <span id="slot-bet-display">1</span>
+      <div class="game-controls">
+        <button id="slot-spin" onclick="spinSlot()">Spin</button>
+      </div>
+      <p id="slot-result"></p>
+    </section>
 
-  <section class="game" id="plinko-section">
-    <h2>💥 Plinko</h2>
-    <div id="plinko-grid"></div>
-    <input type="range" min="0.1" max="1" step="0.1" id="plinko-bet" value="1"/>
-    <button onclick="dropPlinko()">Drop</button>
-    <p id="plinko-result"></p>
-  </section>
+    <section class="game" id="plinko-section">
+      <h2>💥 Plinko</h2>
+      <div id="plinko-grid"></div>
+      <label for="plinko-bet">Bet Size:</label>
+      <input type="range" min="0.1" max="1" step="0.1" id="plinko-bet" value="1"/>
+      <span id="plinko-bet-display">1</span>
+      <div class="game-controls">
+        <button id="plinko-drop" onclick="dropPlinko()">Drop</button>
+      </div>
+      <p id="plinko-result"></p>
+    </section>
+  </main>
 
   <footer>
-    <p>Donate: 6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI</p>
+    <p>Donate: <span class="algorand-address">6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI</span></p>
+    <p class="cosmic-footer">🚀 May the cosmic luck be with you! 🚀</p>
   </footer>
 
   <script src="scripts.js"></script>
