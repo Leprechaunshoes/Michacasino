@@ -1,192 +1,166 @@
-// Utility
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
+// Global Variables
+let houseCoins = 1000;
+let currentBet = 1;
+
+// Initialize on page load
+window.onload = () => {
+  updateHouseCoins();
+};
+
+// Update House Coins Display
+function updateHouseCoins() {
+  document.getElementById("houseCoins").innerText = `HC: ${houseCoins}`;
 }
 
-// ================= SLOT MACHINE =================
-const slotSymbols = ["🌟", "👽", "🪐", "🚀", "💫", "🔮"];
-const slotReels = document.getElementById("slot-reels");
-const spinBtn = document.getElementById("spin-btn");
-const slotResult = document.getElementById("slot-result");
-const slotBetSlider = document.getElementById("slot-bet");
-const slotBetValue = document.getElementById("slot-bet-value");
+// ---------------- SLOT MACHINE ----------------
+const slotSymbols = ['🌟', '🌙', '💫', '🪐', '☄️', '🔮'];
 
-slotBetSlider.addEventListener("input", () => {
-  slotBetValue.textContent = slotBetSlider.value;
-});
+function spinSlot() {
+  if (houseCoins < currentBet) return alert("Not enough HC.");
+  houseCoins -= currentBet;
 
-function generateSlotGrid() {
-  slotReels.innerHTML = "";
-  for (let row = 0; row < 3; row++) {
-    const rowDiv = document.createElement("div");
-    rowDiv.className = "slot-row";
-    for (let col = 0; col < 5; col++) {
-      const symbol = slotSymbols[getRandomInt(0, slotSymbols.length - 1)];
-      const span = document.createElement("span");
-      span.textContent = symbol;
-      span.className = "slot-cell";
-      rowDiv.appendChild(span);
-    }
-    slotReels.appendChild(rowDiv);
+  const slot1 = document.getElementById("slot1");
+  const slot2 = document.getElementById("slot2");
+  const slot3 = document.getElementById("slot3");
+
+  let s1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+  let s2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+  let s3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+
+  slot1.innerText = s1;
+  slot2.innerText = s2;
+  slot3.innerText = s3;
+
+  let win = 0;
+  if (s1 === s2 && s2 === s3) {
+    win = currentBet * 10;
+  } else if (s1 === s2 || s2 === s3 || s1 === s3) {
+    win = currentBet * 2;
   }
+
+  houseCoins += win;
+  updateHouseCoins();
+  showResult('slotResult', win);
 }
 
-function checkSlotWin() {
-  const rows = slotReels.querySelectorAll(".slot-row");
-  let win = false;
-  rows.forEach(row => {
-    const symbols = Array.from(row.children).map(c => c.textContent);
-    const first = symbols[0];
-    if (symbols.every(s => s === first)) {
-      win = true;
-      row.style.animation = "winFlash 1s ease-in-out infinite alternate";
-    } else {
-      row.style.animation = "none";
-    }
-  });
-  return win;
+// ---------------- BLACKJACK ----------------
+let playerCards = [];
+let dealerCards = [];
+
+function dealCard() {
+  const ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A'];
+  const suits = ['♠', '♥', '♦', '♣'];
+  const rank = ranks[Math.floor(Math.random() * ranks.length)];
+  const suit = suits[Math.floor(Math.random() * suits.length)];
+  return { rank, suit };
 }
 
-spinBtn.addEventListener("click", () => {
-  generateSlotGrid();
-  const win = checkSlotWin();
-  slotResult.textContent = win ? "🌈 WINNER!" : "Try Again!";
-});
-
-// ================= BLACKJACK =================
-const dealBtn = document.getElementById("deal-btn");
-const hitBtn = document.getElementById("hit-btn");
-const standBtn = document.getElementById("stand-btn");
-const dealerHandDiv = document.getElementById("dealer-hand");
-const playerHandDiv = document.getElementById("player-hand");
-const blackjackResult = document.getElementById("blackjack-result");
-const blackjackBet = document.getElementById("blackjack-bet");
-const blackjackBetValue = document.getElementById("blackjack-bet-value");
-
-blackjackBet.addEventListener("input", () => {
-  blackjackBetValue.textContent = blackjackBet.value;
-});
-
-const suits = ["♠", "♥", "♦", "♣"];
-const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-let deck = [], playerHand = [], dealerHand = [];
-
-function createDeck() {
-  deck = [];
-  for (let suit of suits) {
-    for (let value of values) {
-      deck.push({ suit, value });
-    }
-  }
-  deck.sort(() => Math.random() - 0.5);
+function cardValue(card) {
+  if (['J', 'Q', 'K'].includes(card.rank)) return 10;
+  if (card.rank === 'A') return 11;
+  return card.rank;
 }
 
-function dealCard(hand, div) {
-  const card = deck.pop();
-  hand.push(card);
-  const cardDiv = document.createElement("div");
-  cardDiv.className = "card";
-  cardDiv.textContent = `${card.value}${card.suit}`;
-  div.appendChild(cardDiv);
-}
-
-function getHandValue(hand) {
-  let value = 0;
-  let aces = 0;
-  for (let card of hand) {
-    if (["J", "Q", "K"].includes(card.value)) value += 10;
-    else if (card.value === "A") {
-      value += 11;
-      aces++;
-    } else {
-      value += parseInt(card.value);
-    }
-  }
-  while (value > 21 && aces > 0) {
-    value -= 10;
+function calculateTotal(hand) {
+  let total = hand.reduce((sum, card) => sum + cardValue(card), 0);
+  let aces = hand.filter(c => c.rank === 'A').length;
+  while (total > 21 && aces) {
+    total -= 10;
     aces--;
   }
-  return value;
+  return total;
 }
 
-function endBlackjack() {
-  hitBtn.disabled = true;
-  standBtn.disabled = true;
-  let dealerValue = getHandValue(dealerHand);
-  while (dealerValue < 17) {
-    dealCard(dealerHand, dealerHandDiv);
-    dealerValue = getHandValue(dealerHand);
-  }
-  const playerValue = getHandValue(playerHand);
-  if (playerValue > 21) {
-    blackjackResult.textContent = "Bust! Dealer wins!";
-  } else if (dealerValue > 21 || playerValue > dealerValue) {
-    blackjackResult.textContent = "You win!";
-  } else if (dealerValue === playerValue) {
-    blackjackResult.textContent = "Push!";
-  } else {
-    blackjackResult.textContent = "Dealer wins!";
+function renderCards(hand, containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  hand.forEach(card => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerText = `${card.rank}${card.suit}`;
+    container.appendChild(div);
+  });
+}
+
+function startBlackjack() {
+  if (houseCoins < currentBet) return alert("Not enough HC.");
+  houseCoins -= currentBet;
+  updateHouseCoins();
+
+  playerCards = [dealCard(), dealCard()];
+  dealerCards = [dealCard()];
+  renderCards(playerCards, 'playerCards');
+  renderCards(dealerCards, 'dealerCards');
+  document.getElementById('bjResult').innerText = '';
+}
+
+function hitCard() {
+  playerCards.push(dealCard());
+  renderCards(playerCards, 'playerCards');
+
+  const total = calculateTotal(playerCards);
+  if (total > 21) {
+    showResult('bjResult', 0, "Bust!");
   }
 }
 
-dealBtn.addEventListener("click", () => {
-  createDeck();
-  playerHand = [];
-  dealerHand = [];
-  playerHandDiv.innerHTML = "";
-  dealerHandDiv.innerHTML = "";
-  blackjackResult.textContent = "";
-  dealCard(playerHand, playerHandDiv);
-  dealCard(playerHand, playerHandDiv);
-  dealCard(dealerHand, dealerHandDiv);
-  hitBtn.disabled = false;
-  standBtn.disabled = false;
-});
-
-hitBtn.addEventListener("click", () => {
-  dealCard(playerHand, playerHandDiv);
-  const val = getHandValue(playerHand);
-  if (val > 21) {
-    blackjackResult.textContent = "Bust!";
-    endBlackjack();
+function standCards() {
+  while (calculateTotal(dealerCards) < 17) {
+    dealerCards.push(dealCard());
   }
-});
+  renderCards(dealerCards, 'dealerCards');
 
-standBtn.addEventListener("click", () => {
-  endBlackjack();
-});
+  const playerTotal = calculateTotal(playerCards);
+  const dealerTotal = calculateTotal(dealerCards);
 
-// ================= PLINKO =================
-const plinkoBoard = document.getElementById("plinko-board");
-const dropBallBtn = document.getElementById("drop-ball-btn");
-const plinkoResult = document.getElementById("plinko-result");
-const plinkoBet = document.getElementById("plinko-bet");
-const plinkoBetValue = document.getElementById("plinko-bet-value");
-
-plinkoBet.addEventListener("input", () => {
-  plinkoBetValue.textContent = plinkoBet.value;
-});
-
-const multipliers = [0.5, 1, 2, 3, 5, 10, 15, 20, 50, 100, 250, 500];
-
-function dropPlinkoBall() {
-  plinkoBoard.innerHTML = "";
-  const ball = document.createElement("div");
-  ball.className = "plinko-ball";
-  plinkoBoard.appendChild(ball);
-
-  let column = 6;
-  let steps = 12;
-  for (let i = 0; i < steps; i++) {
-    const dir = Math.random() < 0.5 ? -1 : 1;
-    column += dir;
-    column = Math.max(0, Math.min(11, column));
+  let win = 0;
+  if ((playerTotal <= 21 && playerTotal > dealerTotal) || dealerTotal > 21) {
+    win = currentBet * 2;
+  } else if (playerTotal === dealerTotal) {
+    win = currentBet;
   }
 
-  const multiplier = multipliers[column];
-  const bet = parseFloat(plinkoBet.value);
-  const win = (bet * multiplier).toFixed(2);
-  plinkoResult.textContent = `Ball landed in x${multiplier} → You win ${win} HC!`;
+  houseCoins += win;
+  updateHouseCoins();
+  showResult('bjResult', win);
 }
 
-dropBallBtn.addEventListener("click", dropPlinkoBall);
+// ---------------- PLINKO ----------------
+function playPlinko() {
+  if (houseCoins < currentBet) return alert("Not enough HC.");
+  houseCoins -= currentBet;
+
+  const ball = document.createElement('div');
+  ball.className = 'plinkoBall';
+  document.getElementById('plinkoBoard').appendChild(ball);
+
+  const columnCount = 12;
+  let pos = 6; // Start in the middle
+  let interval = setInterval(() => {
+    ball.style.left = `${pos * 30}px`;
+    if (Math.random() > 0.5 && pos < columnCount - 1) pos++;
+    else if (pos > 0) pos--;
+  }, 100);
+
+  setTimeout(() => {
+    clearInterval(interval);
+    let multiplier = [0, 0.5, 0.75, 1, 1.25, 1.5, 2, 1.5, 1.25, 1, 0.75, 0.5][pos];
+    let win = Math.round(currentBet * multiplier);
+    houseCoins += win;
+    updateHouseCoins();
+    showResult('plinkoResult', win);
+    ball.remove();
+  }, 2000);
+}
+
+// ---------------- COMMON ----------------
+function setBet(val) {
+  currentBet = parseFloat(val);
+  document.getElementById("betDisplay").innerText = `Bet: ${currentBet} HC`;
+}
+
+function showResult(id, amount, message) {
+  const el = document.getElementById(id);
+  el.innerText = message || (amount > 0 ? `You won ${amount} HC!` : "You lost.");
+  el.style.color = amount > 0 ? 'lime' : 'red';
+}
