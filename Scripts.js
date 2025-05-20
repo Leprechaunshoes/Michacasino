@@ -1,144 +1,192 @@
-// --- Shared Bet Slider Updates ---
-document.getElementById("slotBetSlider").oninput = function () {
-  document.getElementById("slotBetValue").innerText = this.value + " HC";
-};
-document.getElementById("bjBetSlider").oninput = function () {
-  document.getElementById("bjBetValue").innerText = this.value + " HC";
-};
-document.getElementById("plinkoBetSlider").oninput = function () {
-  document.getElementById("plinkoBetValue").innerText = this.value + " HC";
-};
+// Utility
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
-// --- SLOT MACHINE ---
-function spinSlot() {
-  const emojis = ["🌟", "💫", "🚀", "🪐", "👾", "🔮"];
-  const reel1 = document.getElementById("reel1");
-  const reel2 = document.getElementById("reel2");
-  const reel3 = document.getElementById("reel3");
+// ================= SLOT MACHINE =================
+const slotSymbols = ["🌟", "👽", "🪐", "🚀", "💫", "🔮"];
+const slotReels = document.getElementById("slot-reels");
+const spinBtn = document.getElementById("spin-btn");
+const slotResult = document.getElementById("slot-result");
+const slotBetSlider = document.getElementById("slot-bet");
+const slotBetValue = document.getElementById("slot-bet-value");
 
-  const result1 = emojis[Math.floor(Math.random() * emojis.length)];
-  const result2 = emojis[Math.floor(Math.random() * emojis.length)];
-  const result3 = emojis[Math.floor(Math.random() * emojis.length)];
+slotBetSlider.addEventListener("input", () => {
+  slotBetValue.textContent = slotBetSlider.value;
+});
 
-  reel1.textContent = result1;
-  reel2.textContent = result2;
-  reel3.textContent = result3;
-
-  const resultText = document.getElementById("slot-result");
-  if (result1 === result2 && result2 === result3) {
-    resultText.innerText = "🎉 JACKPOT! You win!";
-  } else if (result1 === result2 || result2 === result3 || result1 === result3) {
-    resultText.innerText = "✨ Partial Win!";
-  } else {
-    resultText.innerText = "🙃 Try again!";
+function generateSlotGrid() {
+  slotReels.innerHTML = "";
+  for (let row = 0; row < 3; row++) {
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "slot-row";
+    for (let col = 0; col < 5; col++) {
+      const symbol = slotSymbols[getRandomInt(0, slotSymbols.length - 1)];
+      const span = document.createElement("span");
+      span.textContent = symbol;
+      span.className = "slot-cell";
+      rowDiv.appendChild(span);
+    }
+    slotReels.appendChild(rowDiv);
   }
 }
 
-// --- BLACKJACK ---
-let player = [], dealer = [], deck = [];
+function checkSlotWin() {
+  const rows = slotReels.querySelectorAll(".slot-row");
+  let win = false;
+  rows.forEach(row => {
+    const symbols = Array.from(row.children).map(c => c.textContent);
+    const first = symbols[0];
+    if (symbols.every(s => s === first)) {
+      win = true;
+      row.style.animation = "winFlash 1s ease-in-out infinite alternate";
+    } else {
+      row.style.animation = "none";
+    }
+  });
+  return win;
+}
+
+spinBtn.addEventListener("click", () => {
+  generateSlotGrid();
+  const win = checkSlotWin();
+  slotResult.textContent = win ? "🌈 WINNER!" : "Try Again!";
+});
+
+// ================= BLACKJACK =================
+const dealBtn = document.getElementById("deal-btn");
+const hitBtn = document.getElementById("hit-btn");
+const standBtn = document.getElementById("stand-btn");
+const dealerHandDiv = document.getElementById("dealer-hand");
+const playerHandDiv = document.getElementById("player-hand");
+const blackjackResult = document.getElementById("blackjack-result");
+const blackjackBet = document.getElementById("blackjack-bet");
+const blackjackBetValue = document.getElementById("blackjack-bet-value");
+
+blackjackBet.addEventListener("input", () => {
+  blackjackBetValue.textContent = blackjackBet.value;
+});
+
+const suits = ["♠", "♥", "♦", "♣"];
+const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+let deck = [], playerHand = [], dealerHand = [];
 
 function createDeck() {
-  const suits = ['♠️', '♥️', '♦️', '♣️'];
-  const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
   deck = [];
   for (let suit of suits) {
     for (let value of values) {
-      deck.push({ value, suit });
+      deck.push({ suit, value });
     }
   }
-  deck = deck.sort(() => Math.random() - 0.5);
+  deck.sort(() => Math.random() - 0.5);
 }
 
-function getCardHTML(card) {
-  return `<div class="card">${card.value}${card.suit}</div>`;
+function dealCard(hand, div) {
+  const card = deck.pop();
+  hand.push(card);
+  const cardDiv = document.createElement("div");
+  cardDiv.className = "card";
+  cardDiv.textContent = `${card.value}${card.suit}`;
+  div.appendChild(cardDiv);
 }
 
 function getHandValue(hand) {
-  let value = 0, aces = 0;
-  hand.forEach(card => {
-    if (['J','Q','K'].includes(card.value)) value += 10;
-    else if (card.value === 'A') {
+  let value = 0;
+  let aces = 0;
+  for (let card of hand) {
+    if (["J", "Q", "K"].includes(card.value)) value += 10;
+    else if (card.value === "A") {
       value += 11;
       aces++;
-    } else value += parseInt(card.value);
-  });
-  while (value > 21 && aces) {
+    } else {
+      value += parseInt(card.value);
+    }
+  }
+  while (value > 21 && aces > 0) {
     value -= 10;
     aces--;
   }
   return value;
 }
 
-function deal() {
+function endBlackjack() {
+  hitBtn.disabled = true;
+  standBtn.disabled = true;
+  let dealerValue = getHandValue(dealerHand);
+  while (dealerValue < 17) {
+    dealCard(dealerHand, dealerHandDiv);
+    dealerValue = getHandValue(dealerHand);
+  }
+  const playerValue = getHandValue(playerHand);
+  if (playerValue > 21) {
+    blackjackResult.textContent = "Bust! Dealer wins!";
+  } else if (dealerValue > 21 || playerValue > dealerValue) {
+    blackjackResult.textContent = "You win!";
+  } else if (dealerValue === playerValue) {
+    blackjackResult.textContent = "Push!";
+  } else {
+    blackjackResult.textContent = "Dealer wins!";
+  }
+}
+
+dealBtn.addEventListener("click", () => {
   createDeck();
-  player = [deck.pop(), deck.pop()];
-  dealer = [deck.pop(), deck.pop()];
-  updateHands();
-  document.getElementById("bj-result").innerText = "";
-}
+  playerHand = [];
+  dealerHand = [];
+  playerHandDiv.innerHTML = "";
+  dealerHandDiv.innerHTML = "";
+  blackjackResult.textContent = "";
+  dealCard(playerHand, playerHandDiv);
+  dealCard(playerHand, playerHandDiv);
+  dealCard(dealerHand, dealerHandDiv);
+  hitBtn.disabled = false;
+  standBtn.disabled = false;
+});
 
-function hit() {
-  player.push(deck.pop());
-  updateHands();
-  if (getHandValue(player) > 21) {
-    document.getElementById("bj-result").innerText = "😵 Bust! Dealer wins.";
+hitBtn.addEventListener("click", () => {
+  dealCard(playerHand, playerHandDiv);
+  const val = getHandValue(playerHand);
+  if (val > 21) {
+    blackjackResult.textContent = "Bust!";
+    endBlackjack();
   }
-}
+});
 
-function stand() {
-  while (getHandValue(dealer) < 17) dealer.push(deck.pop());
-  updateHands();
-  const playerScore = getHandValue(player);
-  const dealerScore = getHandValue(dealer);
-  let result = "";
-  if (dealerScore > 21 || playerScore > dealerScore) result = "🤑 You win!";
-  else if (playerScore < dealerScore) result = "😓 Dealer wins.";
-  else result = "🤝 Push!";
-  document.getElementById("bj-result").innerText = result;
-}
+standBtn.addEventListener("click", () => {
+  endBlackjack();
+});
 
-function updateHands() {
-  document.getElementById("player-hand").innerHTML = player.map(getCardHTML).join("");
-  document.getElementById("dealer-hand").innerHTML = dealer.map(getCardHTML).join("");
-}
+// ================= PLINKO =================
+const plinkoBoard = document.getElementById("plinko-board");
+const dropBallBtn = document.getElementById("drop-ball-btn");
+const plinkoResult = document.getElementById("plinko-result");
+const plinkoBet = document.getElementById("plinko-bet");
+const plinkoBetValue = document.getElementById("plinko-bet-value");
 
-// --- PLINKO ---
-function createPlinkoBoard() {
-  const board = document.getElementById("plinko-board");
-  board.innerHTML = "";
-  const rows = 12;
-  for (let i = 0; i < rows; i++) {
-    const row = document.createElement("div");
-    row.className = "plinko-row";
-    for (let j = 0; j <= i; j++) {
-      const peg = document.createElement("div");
-      peg.className = "plinko-peg";
-      row.appendChild(peg);
-    }
-    board.appendChild(row);
-  }
-  const multipliers = [0.5, 0.75, 1, 2, 5, 10, 5, 2, 1, 0.75, 0.5];
-  const multRow = document.createElement("div");
-  multRow.className = "plinko-multiplier-row";
-  multipliers.forEach(m => {
-    const mult = document.createElement("div");
-    mult.className = "plinko-multiplier";
-    mult.innerText = m + "x";
-    multRow.appendChild(mult);
-  });
-  board.appendChild(multRow);
-}
+plinkoBet.addEventListener("input", () => {
+  plinkoBetValue.textContent = plinkoBet.value;
+});
+
+const multipliers = [0.5, 1, 2, 3, 5, 10, 15, 20, 50, 100, 250, 500];
 
 function dropPlinkoBall() {
-  const multipliers = [0.5, 0.75, 1, 2, 5, 10, 5, 2, 1, 0.75, 0.5];
-  const position = Math.floor(multipliers.length / 2) + (Math.floor(Math.random() * 5) - 2);
-  const finalIndex = Math.max(0, Math.min(multipliers.length - 1, position));
-  const mult = multipliers[finalIndex];
-  const bet = parseFloat(document.getElementById("plinkoBetSlider").value);
-  const result = bet * mult;
+  plinkoBoard.innerHTML = "";
+  const ball = document.createElement("div");
+  ball.className = "plinko-ball";
+  plinkoBoard.appendChild(ball);
 
-  document.getElementById("plinko-result").innerText = `🎯 You hit ${mult}x! Won ${result.toFixed(2)} HC`;
+  let column = 6;
+  let steps = 12;
+  for (let i = 0; i < steps; i++) {
+    const dir = Math.random() < 0.5 ? -1 : 1;
+    column += dir;
+    column = Math.max(0, Math.min(11, column));
+  }
+
+  const multiplier = multipliers[column];
+  const bet = parseFloat(plinkoBet.value);
+  const win = (bet * multiplier).toFixed(2);
+  plinkoResult.textContent = `Ball landed in x${multiplier} → You win ${win} HC!`;
 }
 
-// Initialize board on load
-window.onload = createPlinkoBoard;
+dropBallBtn.addEventListener("click", dropPlinkoBall);
