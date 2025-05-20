@@ -1,144 +1,132 @@
 body {
   margin: 0;
   padding: 0;
+  background: radial-gradient(ellipse at center, #1a0033 0%, #000000 100%);
   font-family: 'Orbitron', sans-serif;
-  background: radial-gradient(ellipse at top, #1b0033, #000000 80%);
-  color: #ffffff;
+  color: #fff;
   text-align: center;
   overflow-x: hidden;
 }
 
 h1, h2 {
-  color: #f0f0ff;
-  text-shadow: 0 0 10px #9f5fff;
+  color: #e0b3ff;
+  text-shadow: 0 0 10px #c47dff;
+  margin: 20px 0;
 }
 
-button, input[type=range] {
-  padding: 10px 20px;
-  margin: 10px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  background: linear-gradient(145deg, #6c33cc, #9a5dfc);
-  color: #fff;
-  box-shadow: 0 0 10px #9a5dfc;
-  cursor: pointer;
+#houseCoins {
+  font-size: 1.5em;
+  color: #ffccff;
+  text-shadow: 0 0 8px #ff99ff;
 }
 
-button:hover {
-  background: #bf7bff;
-}
-
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
-}
-
-.section {
-  background: rgba(255, 255, 255, 0.05);
+section {
+  border: 2px solid #6600cc;
+  border-radius: 12px;
   margin: 30px auto;
+  max-width: 700px;
+  background: rgba(30, 0, 60, 0.6);
+  box-shadow: 0 0 20px #9400d3;
   padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 0 30px #6c33cc88;
 }
 
-.slot-row {
+/* Slot Machine */
+#slotContainer {
   display: flex;
   justify-content: center;
+  gap: 20px;
+  font-size: 5em;
+  margin: 20px 0;
+  color: #fff;
+  text-shadow: 0 0 10px #ffd700;
+}
+
+#slotResult {
+  font-size: 1.3em;
+  margin-top: 10px;
+}
+
+/* Blackjack */
+#playerCards, #dealerCards {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
   margin: 10px 0;
 }
 
-.slot-cell {
-  font-size: 50px;
-  margin: 0 15px;
-  transition: transform 0.2s ease-in-out;
-}
-
-@keyframes winFlash {
-  from { transform: scale(1); color: #fff; }
-  to { transform: scale(1.3); color: #00ffcc; }
-}
-
-#slot-result {
-  font-size: 22px;
-  margin-top: 10px;
-  color: #ffffcc;
-}
-
-/* BLACKJACK */
-#dealer-hand, #player-hand {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-
 .card {
-  background: linear-gradient(to bottom, #fff, #eeeeff);
+  background-color: #fff;
   color: #000;
-  font-weight: bold;
-  font-size: 30px;
-  border: 2px solid #888;
-  border-radius: 8px;
-  width: 60px;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 5px;
-  box-shadow: 0 0 10px #fff;
+  font-size: 2em;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #00ffcc;
 }
 
-/* PLINKO */
-#plinko-board {
+/* Plinko */
+#plinkoBoard {
   position: relative;
   height: 300px;
-  width: 100%;
+  background: linear-gradient(to bottom, #2c003e, #000);
   margin: 20px auto;
-  border: 2px dashed #9f5fff88;
-  border-radius: 15px;
-  background: rgba(255, 255, 255, 0.02);
+  border: 2px solid #8000ff;
+  border-radius: 10px;
   overflow: hidden;
 }
 
-.plinko-ball {
+.plinkoBall {
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
   width: 20px;
   height: 20px;
-  background: #ff0;
+  background: #ff69b4;
   border-radius: 50%;
-  box-shadow: 0 0 10px #ff0;
-  animation: fall 2s ease forwards;
+  animation: drop 2s linear forwards;
 }
 
-@keyframes fall {
-  0% { top: 0; }
+@keyframes drop {
+  0% { top: 0px; }
   100% { top: 280px; }
 }
 
-#plinko-result {
-  font-size: 20px;
-  color: #aaffff;
+#plinkoResult {
+  font-size: 1.3em;
   margin-top: 10px;
 }
 
-/* Bet sliders */
-input[type=range] {
-  width: 200px;
+/* Buttons */
+button {
+  background: linear-gradient(to right, #a64dff, #8000ff);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 8px;
+  font-size: 1em;
+  cursor: pointer;
+  box-shadow: 0 0 8px #b266ff;
+  transition: transform 0.1s;
 }
 
-/* Responsive tweaks */
-@media screen and (max-width: 600px) {
-  .slot-cell {
-    font-size: 30px;
-    margin: 0 8px;
-  }
-  .card {
-    font-size: 20px;
-    width: 45px;
-    height: 60px;
-  }
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #e066ff;
+}
+
+/* Bet Controls */
+#betControls {
+  margin: 15px 0;
+}
+
+#betDisplay {
+  margin-top: 8px;
+  font-size: 1.2em;
+  color: #ffb3ff;
+}
+
+/* Donate Section */
+#donate {
+  margin-top: 30px;
+  font-size: 0.9em;
+  color: #999;
 }
