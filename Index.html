@@ -3,71 +3,64 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Amina Casino 🌌</title>
+  <title>Amina Casino - Cosmic Edition</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>Amina Casino 🌠</h1>
-    <p class="tagline">Play with House Coins. Win Cosmic Glory.</p>
+    <h1>Amina Casino 🌌</h1>
+    <nav>
+      <button onclick="showGame('slot')">🎰 Slot Machine</button>
+      <button onclick="showGame('blackjack')">🃏 Blackjack</button>
+      <button onclick="showGame('plinko')">🪙 Plinko</button>
+    </nav>
   </header>
 
-  <section class="balance-section">
-    <p>🎲 House Coin Balance: <span id="house-balance">1000</span> HC</p>
-    <button onclick="claimDailyBonus()">Claim Daily Bonus</button>
-  </section>
-
-  <main class="games-container">
+  <main>
     <!-- SLOT MACHINE -->
-    <section class="game" id="slot-game">
-      <h2>🎰 Cosmic Slots</h2>
-      <div class="slot-display" id="slot-reels">
-        <div class="reel" id="reel1">🌟</div>
+    <section id="slot" class="game-section">
+      <h2>🎰 Cosmic Slot Machine</h2>
+      <div class="slot-container">
+        <div class="reel" id="reel1">💫</div>
         <div class="reel" id="reel2">🌟</div>
-        <div class="reel" id="reel3">🌟</div>
-        <div class="reel" id="reel4">🌟</div>
-        <div class="reel" id="reel5">🌟</div>
+        <div class="reel" id="reel3">🚀</div>
       </div>
-      <input type="range" min="0.1" max="1" step="0.1" value="0.25" id="slot-bet-slider">
-      <p>Bet: <span id="slot-bet">0.25</span> HC</p>
       <button onclick="spinSlot()">Spin</button>
-      <p id="slot-result"></p>
+      <p id="slot-result" class="result-message"></p>
     </section>
 
     <!-- BLACKJACK -->
-    <section class="game" id="blackjack-game">
+    <section id="blackjack" class="game-section" style="display:none;">
       <h2>🃏 Cosmic Blackjack</h2>
       <div class="blackjack-table">
-        <p>Dealer: <span id="dealer-cards"></span></p>
-        <p>You: <span id="player-cards"></span></p>
+        <div>
+          <h3>Dealer</h3>
+          <div id="dealer-cards" class="card-area"></div>
+        </div>
+        <div>
+          <h3>Player</h3>
+          <div id="player-cards" class="card-area"></div>
+        </div>
       </div>
-      <input type="range" min="0.1" max="1" step="0.1" value="0.25" id="bj-bet-slider">
-      <p>Bet: <span id="bj-bet">0.25</span> HC</p>
       <div class="bj-controls">
-        <button onclick="startBlackjack()">Deal</button>
+        <button onclick="dealBlackjack()">Deal</button>
         <button onclick="hit()">Hit</button>
         <button onclick="stand()">Stand</button>
+        <p id="blackjack-result" class="result-message"></p>
       </div>
-      <p id="blackjack-result"></p>
     </section>
 
     <!-- PLINKO -->
-    <section class="game" id="plinko-game">
-      <h2>🪐 Plinko Galaxy</h2>
-      <div class="plinko-board" id="plinko-board">
-        <!-- Plinko rows will be generated via JS -->
-      </div>
-      <input type="range" min="0.1" max="1" step="0.1" value="0.25" id="plinko-bet-slider">
-      <p>Bet: <span id="plinko-bet">0.25</span> HC</p>
-      <button onclick="dropPlinko()">Drop Ball</button>
-      <p id="plinko-result"></p>
+    <section id="plinko" class="game-section" style="display:none;">
+      <h2>🪙 Cosmic Plinko</h2>
+      <div class="plinko-board" id="plinko-board"></div>
+      <button onclick="dropPlinko()">Drop</button>
+      <p id="plinko-result" class="result-message"></p>
     </section>
   </main>
 
-  <!-- DONATE SECTION -->
   <footer>
-    <h3>💜 Support Amina Casino</h3>
-    <p>If you enjoy the experience, send a thank-you to:</p>
+    <p>Donate to support Amina Casino 🚀</p>
     <code>6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI</code>
   </footer>
 
