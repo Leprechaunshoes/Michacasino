@@ -2,63 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Amina Casino - Cosmic Edition</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Amina Casino - Cosmic Luck</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <header>
-    <h1>Amina Casino</h1>
-    <p>Cosmic Wagers & Stellar Wins</p>
+    <h1>🌌 Amina Casino</h1>
+    <p>Powered by House Coin — Play in the Stars</p>
+    <div id="balance">Balance: 1000 HC</div>
   </header>
 
   <main>
-    <section id="slot-machine" class="game-section">
-      <h2>🌌 Cosmic Slot Machine 🌌</h2>
-      <div class="slot-container">
-        <div id="slot-reels" class="slot-reels">
-          <!-- 5 reels x 3 rows slot -->
+
+    <!-- SLOT MACHINE -->
+    <section class="game-section" id="slot-machine">
+      <h2>🎰 Cosmic Slot Machine</h2>
+      <div class="slot-grid" id="slot-grid">
+        <div class="reel"></div>
+        <div class="reel"></div>
+        <div class="reel"></div>
+        <div class="reel"></div>
+        <div class="reel"></div>
+      </div>
+      <input type="range" id="slot-bet" min="0.1" max="1" step="0.1" value="0.25"/>
+      <label for="slot-bet">Bet (HC)</label>
+      <button onclick="spinSlot()">Spin</button>
+      <div id="slot-result"></div>
+    </section>
+
+    <!-- BLACKJACK -->
+    <section class="game-section" id="blackjack">
+      <h2>🃏 Blackjack</h2>
+      <div class="blackjack-table">
+        <div>
+          <h3>Dealer</h3>
+          <div id="dealer-hand" class="card-row"></div>
+        </div>
+        <div>
+          <h3>Player</h3>
+          <div id="player-hand" class="card-row"></div>
         </div>
       </div>
-      <button id="spin-btn" class="btn-neon">SPIN</button>
-      <div id="slot-result" class="result-glow"></div>
-      <label for="slot-bet">Bet: <span id="slot-bet-value">0.25</span> Amina</label>
-      <input type="range" id="slot-bet" min="0.1" max="1" step="0.05" value="0.25" />
+      <input type="range" id="bj-bet" min="0.1" max="1" step="0.1" value="0.25"/>
+      <label for="bj-bet">Bet (HC)</label>
+      <div class="bj-controls">
+        <button onclick="startBlackjack()">Deal</button>
+        <button onclick="hit()">Hit</button>
+        <button onclick="stand()">Stand</button>
+      </div>
+      <div id="bj-result"></div>
     </section>
 
-    <section id="blackjack" class="game-section">
-      <h2>🃏 Neon Blackjack Table 🃏</h2>
-      <div id="blackjack-table" class="blackjack-table">
-        <div id="dealer-hand" class="hand dealer-hand"></div>
-        <div id="player-hand" class="hand player-hand"></div>
-      </div>
-      <div class="blackjack-controls">
-        <button id="deal-btn" class="btn-neon">Deal</button>
-        <button id="hit-btn" class="btn-neon" disabled>Hit</button>
-        <button id="stand-btn" class="btn-neon" disabled>Stand</button>
-      </div>
-      <div id="blackjack-result" class="result-glow"></div>
-      <label for="blackjack-bet">Bet: <span id="blackjack-bet-value">0.25</span> Amina</label>
-      <input type="range" id="blackjack-bet" min="0.1" max="1" step="0.05" value="0.25" />
+    <!-- PLINKO -->
+    <section class="game-section" id="plinko">
+      <h2>🌠 Plinko</h2>
+      <div id="plinko-board"></div>
+      <input type="range" id="plinko-bet" min="0.1" max="1" step="0.1" value="0.25"/>
+      <label for="plinko-bet">Bet (HC)</label>
+      <button onclick="dropPlinkoBall()">Drop Ball</button>
+      <div id="plinko-result"></div>
     </section>
 
-    <section id="plinko" class="game-section">
-      <h2>✨ Cosmic Plinko ✨</h2>
-      <div id="plinko-board" class="plinko-board">
-        <!-- Peg grid & ball container -->
-      </div>
-      <button id="drop-ball-btn" class="btn-neon">DROP BALL</button>
-      <div id="plinko-result" class="result-glow"></div>
-      <label for="plinko-bet">Bet: <span id="plinko-bet-value">0.25</span> Amina</label>
-      <input type="range" id="plinko-bet" min="0.1" max="1" step="0.05" value="0.25" />
-      <div id="plinko-multipliers" class="multipliers">
-        <span>×0.5</span><span>×1</span><span>×2</span><span>×3</span><span>×5</span><span>×10</span><span>×15</span><span>×20</span><span>×50</span><span>×100</span><span>×250</span><span>×500</span>
-      </div>
-    </section>
   </main>
 
+  <!-- DONATION -->
   <footer>
-    <p>© 2025 Amina Casino - May the stars be with your bets 🌟</p>
+    <h3>🙏 Support Amina Casino</h3>
+    <p>Donations welcome at:<br/><strong>6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI</strong></p>
   </footer>
 
   <script src="scripts.js"></script>
