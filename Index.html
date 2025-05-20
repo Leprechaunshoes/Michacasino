@@ -3,71 +3,64 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Amina Casino</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Amina Cosmic Casino</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>🌌 Amina Casino</h1>
-    <p>Welcome to the cosmic crypto arcade of the future.</p>
-    <div id="balance-display">House Coins: <span id="balance">1000</span></div>
-  </header>
+  <div class="container">
+    <header>
+      <h1>Amina Cosmic Casino 🌌</h1>
+    </header>
 
-  <!-- SLOT MACHINE SECTION -->
-  <section id="slot-machine" class="game-section">
-    <h2>🎰 Slot Machine</h2>
-    <div class="slot-container">
-      <div class="reel" id="reel1">⭐</div>
-      <div class="reel" id="reel2">🌟</div>
-      <div class="reel" id="reel3">🌠</div>
-      <div class="reel" id="reel4">🪐</div>
-      <div class="reel" id="reel5">💫</div>
-    </div>
-    <input type="range" id="slot-bet" min="0.1" max="1" step="0.1" value="0.25">
-    <span>Bet: <span id="slot-bet-display">0.25</span> HC</span>
-    <button onclick="spinSlot()">Spin</button>
-    <div id="slot-result"></div>
-  </section>
+    <section class="game-section">
+      <h2>🎰 Cosmic Slots</h2>
+      <div class="slot-machine">
+        <div class="reel" id="reel1"></div>
+        <div class="reel" id="reel2"></div>
+        <div class="reel" id="reel3"></div>
+        <div class="reel" id="reel4"></div>
+        <div class="reel" id="reel5"></div>
+      </div>
+      <input type="range" min="0.1" max="1" step="0.1" value="0.25" id="slot-bet" />
+      <button onclick="spinSlots()">Spin</button>
+      <div id="slot-result"></div>
+    </section>
 
-  <!-- BLACKJACK SECTION -->
-  <section id="blackjack" class="game-section">
-    <h2>🃏 Blackjack</h2>
-    <div class="blackjack-table">
-      <div id="dealer-hand" class="card-row">Dealer: </div>
-      <div id="player-hand" class="card-row">You: </div>
-    </div>
-    <input type="range" id="blackjack-bet" min="0.1" max="1" step="0.1" value="0.25">
-    <span>Bet: <span id="blackjack-bet-display">0.25</span> HC</span>
-    <div class="bj-controls">
-      <button onclick="deal()">Deal</button>
-      <button onclick="hit()">Hit</button>
-      <button onclick="stand()">Stand</button>
-    </div>
-    <div id="blackjack-result"></div>
-  </section>
+    <section class="game-section">
+      <h2>🃏 Cosmic Blackjack</h2>
+      <div class="blackjack-table">
+        <div>
+          <strong>Dealer:</strong>
+          <div id="dealer-cards" class="card-row"></div>
+        </div>
+        <div>
+          <strong>Player:</strong>
+          <div id="player-cards" class="card-row"></div>
+        </div>
+        <input type="range" min="0.1" max="1" step="0.1" value="0.25" id="bj-bet" />
+        <div class="bj-controls">
+          <button onclick="startBlackjack()">Deal</button>
+          <button onclick="hit()">Hit</button>
+          <button onclick="stand()">Stand</button>
+        </div>
+        <div id="bj-result"></div>
+      </div>
+    </section>
 
-  <!-- PLINKO SECTION -->
-  <section id="plinko" class="game-section">
-    <h2>🔮 Plinko</h2>
-    <div class="plinko-board" id="plinko-board">
-      <!-- JavaScript will generate the board here -->
-    </div>
-    <input type="range" id="plinko-bet" min="0.1" max="1" step="0.1" value="0.25">
-    <span>Bet: <span id="plinko-bet-display">0.25</span> HC</span>
-    <button onclick="dropPlinkoBall()">Drop Ball</button>
-    <div id="plinko-result"></div>
-  </section>
+    <section class="game-section">
+      <h2>🪐 Cosmic Plinko</h2>
+      <div class="plinko-board" id="plinko-board"></div>
+      <input type="range" min="0.1" max="1" step="0.1" value="0.25" id="plinko-bet" />
+      <button onclick="dropPlinko()">Drop Ball</button>
+      <div id="plinko-result"></div>
+    </section>
 
-  <!-- DONATION SECTION -->
-  <section id="donate" class="game-section">
-    <h2>💎 Support Amina Casino</h2>
-    <p>If you love this project, you can send a donation to:</p>
-    <code>6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI</code>
-  </section>
-
-  <footer>
-    <p>🌠 Amina Casino — Powered by your passion and the stars.</p>
-  </footer>
+    <section class="donate-section">
+      <h3>💖 Donate</h3>
+      <p>If you enjoy the casino, donate to support:</p>
+      <code>6ZL5LU6ZOG5SQLYD2GLBGFZK7TKM2BB7WGFZCRILWPRRHLH3NYVU5BASYI</code>
+    </section>
+  </div>
 
   <script src="scripts.js"></script>
 </body>
